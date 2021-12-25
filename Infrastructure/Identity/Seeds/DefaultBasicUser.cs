@@ -23,8 +23,8 @@ namespace Infrastructure.Identity.Seeds
             };
             var tjUser = new ApplicationUser
             {
-                UserName = "tjadmin",
-                Email = "tjadmin@gmail.com",
+                UserName = "madmin",
+                Email = "madmin@gmail.com",
                 FirstName = "admin",
                 LastName = "admin",
                 EmailConfirmed = true,

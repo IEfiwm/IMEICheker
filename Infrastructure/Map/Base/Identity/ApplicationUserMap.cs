@@ -26,23 +26,23 @@ namespace Infrastructure.Map.Base.Identity
             //.WithMany(e => e.UpdatedByUsers)
             //.HasForeignKey(e => e.UpdatedByRef);
 
-            builder.Property(m => m.BankAccountRef).IsRequired(false);
+            //builder.Property(m => m.BankAccountRef).IsRequired(false);
 
             builder.Property(m => m.CallerRef).IsRequired(false);
 
             //builder.Property(m => m.CreatedBy).IsRequired(false);
 
-            builder.Property(m => m.ProjectRef).IsRequired(false);
+            //builder.Property(m => m.ProjectRef).IsRequired(false);
 
-            builder
-            .HasOne(s => s.Project)
-            .WithMany(s => s.ProjectUsers)
-            .HasForeignKey(p => p.ProjectRef);
+            //builder
+            //.HasOne(s => s.Project)
+            //.WithMany(s => s.ProjectUsers)
+            //.HasForeignKey(p => p.ProjectRef);
 
-            builder
-            .HasOne(s => s.Bank)
-            .WithMany(s => s.BankUsers)
-            .HasForeignKey(p => p.BankAccountRef);
+            //builder
+            //.HasOne(s => s.Bank)
+            //.WithMany(s => s.BankUsers)
+            //.HasForeignKey(p => p.BankAccountRef);
         }
     }
 }

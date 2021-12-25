@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using NetTopologySuite.Geometries;
 
 namespace Infrastructure.Migrations
 {
@@ -10,12 +9,6 @@ namespace Infrastructure.Migrations
         {
             migrationBuilder.EnsureSchema(
                 name: "Identity");
-
-            migrationBuilder.EnsureSchema(
-                name: "Geography");
-
-            migrationBuilder.EnsureSchema(
-                name: "Basic");
 
             migrationBuilder.CreateTable(
                 name: "Roles",
@@ -51,142 +44,6 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_TbAuthenticationCode", x => x.Id)
                         .Annotation("SqlServer:Clustered", true);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TbCountry",
-                schema: "Geography",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EnglishTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PersianTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ISOCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FlagPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Language = table.Column<int>(type: "int", nullable: false),
-                    Area = table.Column<Geometry>(type: "geography", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TbCountry", x => x.Id)
-                        .Annotation("SqlServer:Clustered", true);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TbProject",
-                schema: "Basic",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ProjectStatus = table.Column<byte>(type: "tinyint", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TbProject", x => x.Id)
-                        .Annotation("SqlServer:Clustered", true);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RoleClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RoleClaims_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalSchema: "Identity",
-                        principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TbProvince",
-                schema: "Geography",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CountryRef = table.Column<long>(type: "bigint", nullable: false),
-                    IsCapital = table.Column<bool>(type: "bit", nullable: false),
-                    Area = table.Column<Geometry>(type: "geography", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TbProvince", x => x.Id)
-                        .Annotation("SqlServer:Clustered", true);
-                    table.ForeignKey(
-                        name: "FK_TbProvince_TbCountry_CountryRef",
-                        column: x => x.CountryRef,
-                        principalSchema: "Geography",
-                        principalTable: "TbCountry",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TbCity",
-                schema: "Geography",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProvinceRef = table.Column<long>(type: "bigint", nullable: false),
-                    Area = table.Column<Geometry>(type: "geography", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TbCity", x => x.Id)
-                        .Annotation("SqlServer:Clustered", true);
-                    table.ForeignKey(
-                        name: "FK_TbCity_TbProvince_ProvinceRef",
-                        column: x => x.ProvinceRef,
-                        principalSchema: "Geography",
-                        principalTable: "TbProvince",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserRoles",
-                schema: "Identity",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_UserRoles_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalSchema: "Identity",
-                        principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -238,8 +95,6 @@ namespace Infrastructure.Migrations
                     HireDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     StartWorkingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EndWorkingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    BankAccountRef = table.Column<long>(type: "bigint", nullable: true),
-                    ProjectRef = table.Column<long>(type: "bigint", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -259,19 +114,34 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_TbProject_ProjectRef",
-                        column: x => x.ProjectRef,
-                        principalSchema: "Basic",
-                        principalTable: "TbProject",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Users_Users_CallerRef",
                         column: x => x.CallerRef,
                         principalSchema: "Identity",
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RoleClaims_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalSchema: "Identity",
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             //migrationBuilder.CreateTable(
@@ -300,77 +170,6 @@ namespace Infrastructure.Migrations
             //            principalColumn: "Id",
             //            onDelete: ReferentialAction.Restrict);
             //    });
-
-            migrationBuilder.CreateTable(
-                name: "TbAddress",
-                schema: "Geography",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserRef = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AddressType = table.Column<int>(type: "int", nullable: false),
-                    Region = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CityRef = table.Column<int>(type: "int", nullable: false),
-                    Address1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Plate = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Location = table.Column<Point>(type: "geography", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TbAddress", x => x.Id)
-                        .Annotation("SqlServer:Clustered", true);
-                    table.ForeignKey(
-                        name: "FK_TbAddress_Users_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "Identity",
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TbBankAccount",
-                schema: "Basic",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BranchName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BranchCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    iBan = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CardNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedByRef = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UpdatedByRef = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TbBankAccount", x => x.Id)
-                        .Annotation("SqlServer:Clustered", true);
-                    table.ForeignKey(
-                        name: "FK_TbBankAccount_Users_CreatedByRef",
-                        column: x => x.CreatedByRef,
-                        principalSchema: "Identity",
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TbBankAccount_Users_UpdatedByRef",
-                        column: x => x.UpdatedByRef,
-                        principalSchema: "Identity",
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
 
             migrationBuilder.CreateTable(
                 name: "UserClaims",
@@ -410,6 +209,33 @@ namespace Infrastructure.Migrations
                     table.PrimaryKey("PK_UserLogins", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
                         name: "FK_UserLogins_Users_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "Identity",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRoles",
+                schema: "Identity",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalSchema: "Identity",
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Users_UserId",
                         column: x => x.UserId,
                         principalSchema: "Identity",
                         principalTable: "Users",
@@ -459,36 +285,6 @@ namespace Infrastructure.Migrations
                 filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TbAddress_UserId",
-                schema: "Geography",
-                table: "TbAddress",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TbBankAccount_CreatedByRef",
-                schema: "Basic",
-                table: "TbBankAccount",
-                column: "CreatedByRef");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TbBankAccount_UpdatedByRef",
-                schema: "Basic",
-                table: "TbBankAccount",
-                column: "UpdatedByRef");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TbCity_ProvinceRef",
-                schema: "Geography",
-                table: "TbCity",
-                column: "ProvinceRef");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TbProvince_CountryRef",
-                schema: "Geography",
-                table: "TbProvince",
-                column: "CountryRef");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserClaims_UserId",
                 schema: "Identity",
                 table: "UserClaims",
@@ -513,22 +309,10 @@ namespace Infrastructure.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_BankAccountRef",
-                schema: "Identity",
-                table: "Users",
-                column: "BankAccountRef");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Users_CallerRef",
                 schema: "Identity",
                 table: "Users",
                 column: "CallerRef");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_ProjectRef",
-                schema: "Identity",
-                table: "Users",
-                column: "ProjectRef");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -537,40 +321,10 @@ namespace Infrastructure.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_UserRoles_Users_UserId",
-                schema: "Identity",
-                table: "UserRoles",
-                column: "UserId",
-                principalSchema: "Identity",
-                principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Users_TbBankAccount_BankAccountRef",
-                schema: "Identity",
-                table: "Users",
-                column: "BankAccountRef",
-                principalSchema: "Basic",
-                principalTable: "TbBankAccount",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_TbBankAccount_Users_CreatedByRef",
-                schema: "Basic",
-                table: "TbBankAccount");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_TbBankAccount_Users_UpdatedByRef",
-                schema: "Basic",
-                table: "TbBankAccount");
-
             //migrationBuilder.DropTable(
             //    name: "ApplicationUserApplicationUser",
             //    schema: "Identity");
@@ -579,16 +333,8 @@ namespace Infrastructure.Migrations
                 name: "RoleClaims");
 
             migrationBuilder.DropTable(
-                name: "TbAddress",
-                schema: "Geography");
-
-            migrationBuilder.DropTable(
                 name: "TbAuthenticationCode",
                 schema: "Identity");
-
-            migrationBuilder.DropTable(
-                name: "TbCity",
-                schema: "Geography");
 
             migrationBuilder.DropTable(
                 name: "UserClaims",
@@ -607,28 +353,12 @@ namespace Infrastructure.Migrations
                 schema: "Identity");
 
             migrationBuilder.DropTable(
-                name: "TbProvince",
-                schema: "Geography");
-
-            migrationBuilder.DropTable(
                 name: "Roles",
                 schema: "Identity");
 
             migrationBuilder.DropTable(
-                name: "TbCountry",
-                schema: "Geography");
-
-            migrationBuilder.DropTable(
                 name: "Users",
                 schema: "Identity");
-
-            migrationBuilder.DropTable(
-                name: "TbBankAccount",
-                schema: "Basic");
-
-            migrationBuilder.DropTable(
-                name: "TbProject",
-                schema: "Basic");
         }
     }
 }

@@ -28,7 +28,6 @@ namespace Infrastructure.Extensions
             services.AddTransient(typeof(IIdentityRepositoryAsync<,>), typeof(IdentityRepositoryAsync<,>));
             services.AddTransient(typeof(IBaseIdentityRepository<,>), typeof(BaseIdentityRepository<,>));
             services.AddTransient(typeof(IBaseAuditRepository<,>), typeof(BaseAuditRepository<,>));
-            services.AddScoped<IimportedRepository, ImportedRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             #endregion Repositories

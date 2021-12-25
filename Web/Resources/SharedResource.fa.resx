@@ -210,6 +210,9 @@
   <data name="ImportDataFromExcelForPersonnel" xml:space="preserve">
     <value>پرسنل</value>
   </data>
+  <data name="ImportIMEIData" xml:space="preserve">
+    <value>لیست دستگاه ها</value>
+  </data>
   <data name="Last Name" xml:space="preserve">
     <value>نام خانوادگی</value>
   </data>

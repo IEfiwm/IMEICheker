@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NetTopologySuite.Geometries;
 
 namespace Infrastructure.Migrations
 {
@@ -35,158 +34,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("ApplicationUserApplicationUser");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Base.Geography.Address", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Address1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Address2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AddressType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CityRef")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Point>("Location")
-                        .HasColumnType("geography");
-
-                    b.Property<string>("Plate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Region")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserRef")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ZipCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id")
-                        .IsClustered();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TbAddress", "Geography");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Base.Geography.City", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<Geometry>("Area")
-                        .IsRequired()
-                        .HasColumnType("geography");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("ProvinceRef")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id")
-                        .IsClustered();
-
-                    b.HasIndex("ProvinceRef");
-
-                    b.ToTable("TbCity", "Geography");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Base.Geography.Country", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<Geometry>("Area")
-                        .HasColumnType("geography");
-
-                    b.Property<string>("EnglishTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FlagPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ISOCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Language")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PersianTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id")
-                        .IsClustered();
-
-                    b.ToTable("TbCountry", "Geography");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Base.Geography.Province", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<Geometry>("Area")
-                        .HasColumnType("geography");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("CountryRef")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsCapital")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id")
-                        .IsClustered();
-
-                    b.HasIndex("CountryRef");
-
-                    b.ToTable("TbProvince", "Geography");
-                });
-
             modelBuilder.Entity("Domain.Entities.Base.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -203,9 +50,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("AvatarPath")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("BankAccountRef")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("BirthPlace")
                         .HasColumnType("nvarchar(max)");
@@ -349,9 +193,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("PrefixName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("ProjectRef")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -376,8 +217,6 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BankAccountRef");
-
                     b.HasIndex("CallerRef");
 
                     b.HasIndex("NormalizedEmail")
@@ -387,8 +226,6 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ProjectRef");
 
                     b.ToTable("Users", "Identity");
                 });
@@ -427,88 +264,6 @@ namespace Infrastructure.Migrations
                         .IsClustered();
 
                     b.ToTable("TbAuthenticationCode", "Identity");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Basic.BankAccount", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("AccountNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BranchCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BranchName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CardNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedByRef")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UpdatedByRef")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("iBan")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id")
-                        .IsClustered();
-
-                    b.HasIndex("CreatedByRef");
-
-                    b.HasIndex("UpdatedByRef");
-
-                    b.ToTable("TbBankAccount", "Basic");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Basic.Project", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<byte>("ProjectStatus")
-                        .HasColumnType("tinyint");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id")
-                        .IsClustered();
-
-                    b.ToTable("TbProject", "Basic");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -657,73 +412,13 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.Base.Geography.Address", b =>
-                {
-                    b.HasOne("Domain.Entities.Base.Identity.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Base.Geography.City", b =>
-                {
-                    b.HasOne("Domain.Entities.Base.Geography.Province", "Province")
-                        .WithMany()
-                        .HasForeignKey("ProvinceRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Province");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Base.Geography.Province", b =>
-                {
-                    b.HasOne("Domain.Entities.Base.Geography.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-                });
-
             modelBuilder.Entity("Domain.Entities.Base.Identity.ApplicationUser", b =>
                 {
-                    b.HasOne("Domain.Entities.Basic.BankAccount", "Bank")
-                        .WithMany("BankUsers")
-                        .HasForeignKey("BankAccountRef");
-
                     b.HasOne("Domain.Entities.Base.Identity.ApplicationUser", "Caller")
                         .WithMany("CallerUsers")
                         .HasForeignKey("CallerRef");
 
-                    b.HasOne("Domain.Entities.Basic.Project", "Project")
-                        .WithMany("ProjectUsers")
-                        .HasForeignKey("ProjectRef");
-
-                    b.Navigation("Bank");
-
                     b.Navigation("Caller");
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Basic.BankAccount", b =>
-                {
-                    b.HasOne("Domain.Entities.Base.Identity.ApplicationUser", "CreatedByUser")
-                        .WithMany("BankCreatedByUsers")
-                        .HasForeignKey("CreatedByRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Base.Identity.ApplicationUser", "UpdatedByUser")
-                        .WithMany("BankUpdatedByUsers")
-                        .HasForeignKey("UpdatedByRef");
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("UpdatedByUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -779,21 +474,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Base.Identity.ApplicationUser", b =>
                 {
-                    b.Navigation("BankCreatedByUsers");
-
-                    b.Navigation("BankUpdatedByUsers");
-
                     b.Navigation("CallerUsers");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Basic.BankAccount", b =>
-                {
-                    b.Navigation("BankUsers");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Basic.Project", b =>
-                {
-                    b.Navigation("ProjectUsers");
                 });
 #pragma warning restore 612, 618
         }

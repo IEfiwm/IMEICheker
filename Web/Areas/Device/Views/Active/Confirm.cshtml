@@ -1,0 +1,122 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/css/intlTelInput.css" rel="stylesheet">
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.15/tailwind.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body id="b">
+
+    <!-- Only needed for this Demo -->
+    <section class="multi_step_form">
+        <form id="msform">
+            <!-- Tittle -->
+            <div class="tittle">
+                <h2>فرآیند تایید دستگاه</h2>
+                <p></p>
+            </div>
+
+            <!-- progressbar -->
+            <ul id="progressbar">
+                <li class="active">وارد کردن شماره تلفن</li>
+                <li class="rtl">وارد کردن IMEI</li>
+                <li>آپلود مدارک</li>
+            </ul>
+
+            <!-- fieldsets -->
+            <fieldset>
+                <h3>شماره تلفن خود را وارد کنید</h3>
+                <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ.</h6>
+                <div class="form-row justify-content-center">
+                    <div class="form-group col-md-3">
+                        <input type="tel" id="phone" class="form-control" placeholder="+98">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control" id="phoneNumber" placeholder="e.g: 9121234567">
+                    </div>
+                </div>
+                <!-- <button type="button" class="action-button previous previous_button" disabled>بازگشت</button> -->
+                <button type="button" class="next action-button" onclick="confirmPhoneNumber()">ادامه</button>
+            </fieldset>
+
+            <fieldset>
+                <h3 class="rtl">IMEI دستگاه خورد را وارد کنید</h3>
+                <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ.</h6>
+                <div class="form-row justify-content-center">
+                    <div class="form-group col-md-8">
+                        <input type="text" id="imei" class="form-control" value="866484046957063">
+                    </div>
+                </div>
+                <button type="button" class="action-button previous previous_button">بازگشت</button>
+                <button type="button" class="action-button" onclick="confirmIMEI()">ادامه</button>
+                <button type="button" class="next" id="IMEIButton"></button>
+            </fieldset>
+
+            <fieldset>
+                <h3 class="rtl">مدارک مورد نیاز را آپلود کنید</h3>
+                <h6>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ.</h6>
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input type="file" name="orderPic_temp" class="custom-file-input" accept=".jpg,.png" id="orderPic_temp">
+                        <input type="file" name="nationalCard_temp" class="custom-file-input" accept=".jpg,.png" id="nationalCard_temp">
+                        <label class="custom-file-label" for="orderPic_temp"><i class="ion-android-cloud-outline"></i>انتخاب صورت حساب</label>
+                        <label class="custom-file-label" for="nationalCard_temp"><i class="ion-android-cloud-outline"></i>انتخاب کارت ملی</label>
+                    </div>
+                </div>
+                <button type="button" class="action-button previous previous_button">بازگشت</button>
+                <button type="button" class="next action-button" onclick="sendDocuments()">تایید نهایی</button>
+            </fieldset>
+        </form>
+    </section>
+    <form hidden>
+        <input type="text" name="phoneNumber" id="finalPhoneNumber">
+        <input type="text" name="iMEI" id="finalImei">
+        <input type="text" name="nationalCard" id="nationalCard">
+        <input type="text" name="orderPic" id="orderPic">
+    </form>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/js/intlTelInput.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+
+<script src="/js/script.js"></script>
+<script src="/js/common.js"></script>
+<script>
+
+    $("input[type='file']").on("change", function (e) {
+
+        var count=1;
+        var files = e.currentTarget.files; // puts all files into an array
+
+        // call them as such; files[0].size will get you the file size of the 0th file
+        for (var x in files) {
+
+            var filesize = ((files[x].size/1024)/1024).toFixed(4); // MB
+
+            console.log(files[x].type)
+            if (files[x].name != "item" && typeof files[x].name != "undefined" && filesize >= 10) {
+                SendNotification("error","حجم فایل بیش از حد مجاز است.");
+                return;
+            }else if(files[x].name != "item" && typeof files[x].name != "undefined" && !(files[x].type == "image/jpeg" || files[x].type == "image/png")){
+                SendNotification("error","فرمت فایل مجاز نیست.");
+                return;
+            }
+        }
+    });
+
+</script>
+</html>

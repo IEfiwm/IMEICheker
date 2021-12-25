@@ -2,6 +2,9 @@
 using Domain.Entities.Data;
 using Infrastructure.DbContexts;
 using Infrastructure.Repositories.Base;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories.Application
 {
@@ -18,6 +21,11 @@ namespace Infrastructure.Repositories.Application
                 //baseCacheKey
                 )
         {
+        }
+
+        public async Task<Imported> GetByIMEI(string imei)
+        {
+            return await Model.Where(m => m.IMEI == imei).FirstOrDefaultAsync();
         }
     }
 }

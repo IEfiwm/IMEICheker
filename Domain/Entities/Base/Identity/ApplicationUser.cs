@@ -64,9 +64,9 @@ namespace Domain.Entities.Base.Identity
 
         //public virtual ICollection<Project> ProjectCreatedByUsers { get; set; }
 
-        public virtual ICollection<BankAccount> BankUpdatedByUsers { get; set; }
+        //public virtual ICollection<BankAccount> BankUpdatedByUsers { get; set; }
 
-        public virtual ICollection<BankAccount> BankCreatedByUsers { get; set; }
+        //public virtual ICollection<BankAccount> BankCreatedByUsers { get; set; }
 
         public string FatherName { get; set; }
 
@@ -121,13 +121,13 @@ namespace Domain.Entities.Base.Identity
         public DateTime? EndWorkingDate { get; set; }
 
         //[ForeignKey("Bank")]
-        public long? BankAccountRef { get; set; }
+        // public long? BankAccountRef { get; set; }
 
         //[ForeignKey("Project")]
-        public long? ProjectRef { get; set; }
+        //public long? ProjectRef { get; set; }
 
-        public virtual BankAccount Bank { get; set; }
+        //public virtual BankAccount Bank { get; set; }
 
-        public virtual Project Project { get; set; }
+        //public virtual Project Project { get; set; }
     }
 }
