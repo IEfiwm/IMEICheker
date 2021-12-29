@@ -7,12 +7,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/js/intlTelInput.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/css/intlTelInput.css" rel="stylesheet">
     <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.15/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="/css/style.css" rel="stylesheet">
     <title>Document</title>
 </head>
@@ -85,13 +91,34 @@
         <input type="text" name="nationalCard" id="nationalCard">
         <input type="text" name="orderPic" id="orderPic">
     </form>
+    <div class="overlay overlay01" id="overlay">
+        <div class="screen" id="successmessage">
+            <div class="border-top">
+            </div>
+
+            <svg color="green" width="166" height="150" id="topIcon" viewBox="0 0 76 76" class="success-message__icon icon-checkmark">
+                <circle cx="38" cy="38" r="36" fill="#5AE9BA" />
+                <path fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M17.7,40.9l10.9,10.9l28.7-28.7" />
+            </svg>
+            <h3>اطلاعات با موفقیت ثبت شد!</h3>
+            <p>وضعیت فرآیند با پیامک به شما اطلاع داده می شود.</p>
+
+        </div>
+        <div class="screen" id="errormessage">
+            <div class="border-top">
+            </div>
+
+            <svg color="green" width="166" height="150" id="topIcon" viewBox="0 0 76 76" class="success-message__icon icon-checkmark">
+                <circle cx="38" cy="38" r="36" fill="#5AE9BA" />
+                <path fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M17.7,40.9l10.9,10.9l28.7-28.7" />
+            </svg>
+            <h3>اطلاعات با موفقیت ثبت شد!</h3>
+            <p>وضعیت فرآیند با پیامک به شما اطلاع داده می شود..</p>
+
+        </div>
+    </div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.2/js/intlTelInput.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+
 
 <script src="/js/script.js"></script>
 <script src="/js/common.js"></script>
@@ -101,6 +128,8 @@
 
         var count=1;
         var files = e.currentTarget.files; // puts all files into an array
+
+        console.log(files);
 
         // call them as such; files[0].size will get you the file size of the 0th file
         for (var x in files) {
@@ -114,9 +143,14 @@
             }else if(files[x].name != "item" && typeof files[x].name != "undefined" && !(files[x].type == "image/jpeg" || files[x].type == "image/png")){
                 SendNotification("error","فرمت فایل مجاز نیست.");
                 return;
+            }else if(files[x].name == "item" && typeof files[x].name == "undefined"){
+                                SendNotification("error","فایل خراب است.");
+                return;
             }
         }
     });
+
+
 
 </script>
 </html>

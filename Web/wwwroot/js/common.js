@@ -144,9 +144,13 @@ function sendDocuments() {
         processData: false,
 
         success: function (response) {
-            setTimeout(function () {
-                location.reload();
-            }, 1000 * 2);
+            if (response) {
+                $("#overlay").show()
+            } else {
+                SendNotification("error", "خطا در بارگزاری اطلاعات.");
+            }
         },
     });
 }
+
+$("#overlay").hide()

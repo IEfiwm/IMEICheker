@@ -118,3 +118,4 @@ var animating; //flag to prevent quick multi-click glitches
     phoneNoselect();
     nice_Select();
 })(jQuery);
+

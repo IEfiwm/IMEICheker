@@ -97,9 +97,9 @@ namespace Web.Areas.Device.Controllers
                 });
             }
 
-            await _documentRepository.SaveChangesAsync();
+            var res = await _documentRepository.SaveChangesAsync() > 0;
 
-            return View();
+            return Ok(res);
         }
 
         public async Task<IActionResult> CheckIMEIIsExist(string imei)
