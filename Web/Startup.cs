@@ -98,12 +98,8 @@ namespace Web
 
             app.Use(async (context, next) =>
             {
-                if (DateTime.Now.Date.Month != 12)
-                    context.Response.StatusCode = 403;
-                else
-                {
-                    await next();
-                }
+                await next();
+
             });
 
             app.UseNotyf();

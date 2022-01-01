@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "مدیریت مدارک";
+    ViewData["Caption"] = "مدارک را از اینجا مدیریت کنید.";
+}
+<div class="card">
+    <div class="col-sm-12" style="padding:20px">
+    </div>
+    <div id="viewAll" class="card-body table-responsive">
+    </div>
+</div>
+@section Scripts
+{
+<script src="~/js/site.js"></script>
+<script>
+    $(document).ready(function () {
+        loadData();
+        //$('#reload').on('click', function () {
+        //    loadData();
+        //});
+    });
+    function loadData() {
+        $('#viewAll').load('/admin/document/LoadAll');
+    }
+</script>
+}

@@ -92,7 +92,7 @@ namespace Web.Areas.Device.Controllers
                 {
                     FileName = filename,
                     FilePath = fullPath,
-                    DocumentType = Common.Enums.DocumentType.NationalCard,
+                    DocumentType = Common.Enums.DocumentType.OrderPicture,
                     ImportedDataRef = data.Id
                 });
             }
