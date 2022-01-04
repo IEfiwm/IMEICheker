@@ -15,11 +15,25 @@ namespace Infrastructure.Repositories.Application.Data
         {
         }
 
+        public Task<List<Document>> GetAllByImportedRef(long importedRef)
+        {
+            return Model
+                .Where(m => m.ImportedDataRef == importedRef)
+                .ToListAsync();
+        }
+
         public Task<List<Document>> GetAllDocumentAsync()
         {
             return Model
                 .Include(x => x.ImportedData)
                 .ToListAsync();
+        }
+
+        public Task<Document> GetDocAsync(long id)
+        {
+            return Model
+                .Include(x => x.ImportedData)
+                .FirstOrDefaultAsync();
         }
     }
 }

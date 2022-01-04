@@ -18,15 +18,6 @@ namespace Web.Areas.Dashboard.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-
-            var roles = await _userManager.GetRolesAsync(user);
-
-            if (roles.Any(m => m == "User"))
-            {
-                return LocalRedirect("~/Dashboard/User/EditInformation");
-            }
-
             return LocalRedirect("~/Dashboard/Managment");
         }
     }

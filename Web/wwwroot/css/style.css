@@ -703,7 +703,7 @@ h1, h2, h3, h4, h5, h6, li, p, button, a {
         transform: translate(-50%, -50%);
     }
 
-    .screen button {
+/*    .screen button {
         background: #5AE9BA;
         border: 1px solid #34E2A9;
         box-shadow: 0 3px 20px 0 rgba(90,233,186,0.60);
@@ -721,7 +721,7 @@ h1, h2, h3, h4, h5, h6, li, p, button, a {
         opacity: 0;
         font-size: 13px;
         cursor: pointer;
-    }
+    }*/
 
         .screen button:focus {
             outline: 0;

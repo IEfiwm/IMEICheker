@@ -5,6 +5,8 @@ namespace Web.Areas.Admin.Models
 {
     public class DocumentViewModel
     {
+        public long Id { get; set; }
+
         public string FilePath { get; set; }
 
         public string FileName { get; set; }
@@ -12,6 +14,8 @@ namespace Web.Areas.Admin.Models
         public DocumentType DocumentType { get; set; }
 
         public bool IsConfirm { get; set; }
+
+        public bool IsDeclined { get; set; }
 
         public long ImportedDataRef { get; set; }
 

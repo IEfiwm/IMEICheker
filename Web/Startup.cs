@@ -13,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using System;
 using System.Reflection;
 using Web.Abstractions;
 using Web.Extensions;
@@ -99,7 +98,6 @@ namespace Web
             app.Use(async (context, next) =>
             {
                 await next();
-
             });
 
             app.UseNotyf();
@@ -123,7 +121,7 @@ namespace Web
                 endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area=Dashboard}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area=Device}/{controller=Active}/{action=Index}/{id?}");
             });
         }
     }

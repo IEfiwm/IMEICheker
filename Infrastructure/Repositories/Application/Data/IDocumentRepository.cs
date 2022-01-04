@@ -9,5 +9,9 @@ namespace Infrastructure.Repositories.Application.Data
     public interface IDocumentRepository : IBaseIdentityRepository<Document, ApplicationDbContext>
     {
         public Task<List<Document>> GetAllDocumentAsync();
+
+        public Task<List<Document>> GetAllByImportedRef(long importedRef);
+
+        public Task<Document> GetDocAsync(long id);
     }
 }

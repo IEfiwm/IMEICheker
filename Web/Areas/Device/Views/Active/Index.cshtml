@@ -20,7 +20,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.15/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="/css/style.css" rel="stylesheet">
-    <title>Document</title>
+    <title>فرآیند تایید دستگاه</title>
 </head>
 <body id="b">
 
@@ -93,8 +93,7 @@
     </form>
     <div class="overlay overlay01" id="overlay">
         <div class="screen" id="successmessage">
-            <div class="border-top">
-            </div>
+            <div class="border-top"></div>
 
             <svg color="green" width="166" height="150" id="topIcon" viewBox="0 0 76 76" class="success-message__icon icon-checkmark">
                 <circle cx="38" cy="38" r="36" fill="#5AE9BA" />
@@ -102,55 +101,150 @@
             </svg>
             <h3>اطلاعات با موفقیت ثبت شد!</h3>
             <p>وضعیت فرآیند با پیامک به شما اطلاع داده می شود.</p>
-
+            <a href="https://kalashar.com" class="btn btn-success btn-md" style="margin-top:55%">بازگشت به سایت</a>
         </div>
-        <div class="screen" id="errormessage">
-            <div class="border-top">
-            </div>
+        @*<div class="screen" id="errormessage">
+                <div class="border-top">
+                </div>
 
-            <svg color="green" width="166" height="150" id="topIcon" viewBox="0 0 76 76" class="success-message__icon icon-checkmark">
-                <circle cx="38" cy="38" r="36" fill="#5AE9BA" />
-                <path fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M17.7,40.9l10.9,10.9l28.7-28.7" />
-            </svg>
-            <h3>اطلاعات با موفقیت ثبت شد!</h3>
-            <p>وضعیت فرآیند با پیامک به شما اطلاع داده می شود..</p>
-
-        </div>
+                <svg color="green" width="166" height="150" id="topIcon" viewBox="0 0 76 76" class="success-message__icon icon-checkmark">
+                    <circle cx="38" cy="38" r="36" fill="#5AE9BA" />
+                    <path fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M17.7,40.9l10.9,10.9l28.7-28.7" />
+                </svg>
+                <h3>اطلاعات با موفقیت ثبت شد!</h3>
+                <p>وضعیت فرآیند با پیامک به شما اطلاع داده می شود.</p>
+            </div>*@
     </div>
-</body>
+    <script src="/js/script.js"></script>
+    <script src="/js/common.js"></script>
+    <script>
+        $("#overlay").hide()
 
+        function confirmPhoneNumber() {
+            if ($("#phone").val() != "+98") {
 
-<script src="/js/script.js"></script>
-<script src="/js/common.js"></script>
-<script>
+                SendNotification("error", "کد کشور معتبر نمی باشد.");
 
-    $("input[type='file']").on("change", function (e) {
+                fs = false;
 
-        var count=1;
-        var files = e.currentTarget.files; // puts all files into an array
-
-        console.log(files);
-
-        // call them as such; files[0].size will get you the file size of the 0th file
-        for (var x in files) {
-
-            var filesize = ((files[x].size/1024)/1024).toFixed(4); // MB
-
-            console.log(files[x].type)
-            if (files[x].name != "item" && typeof files[x].name != "undefined" && filesize >= 10) {
-                SendNotification("error","حجم فایل بیش از حد مجاز است.");
                 return;
-            }else if(files[x].name != "item" && typeof files[x].name != "undefined" && !(files[x].type == "image/jpeg" || files[x].type == "image/png")){
-                SendNotification("error","فرمت فایل مجاز نیست.");
-                return;
-            }else if(files[x].name == "item" && typeof files[x].name == "undefined"){
-                                SendNotification("error","فایل خراب است.");
+            } else if (!IsPhoneNumberValid("0" + $("#phoneNumber").val())) {
+
+                SendNotification("error", "شماره تلفن همراه معتبر نمی باشد.");
+
+                fs = false;
+
                 return;
             }
+
+            fs = true;
+
+            $("#finalPhoneNumber").val("0" + $("#phoneNumber").val())
         }
-    });
 
+        function confirmIMEI() {
+            if (!IsIMEIValid($("#imei").val())) {
 
+                SendNotification("error", "IMEI معتبر نمی باشد.");
 
-</script>
+                fs = false;
+
+                return;
+            }
+
+            $.ajax({
+
+                type: "GET",
+
+                url: "/Device/Active/CheckIMEIIsExist?imei=" + $("#imei").val(),
+
+                success: function (response) {
+                    if (!response) {
+                        fs = false;
+
+                        SendNotification("error", "IMEI موجود نمی باشد.");
+
+                        return;
+                    } else {
+                        fs = true;
+
+                        $("#finalImei").val($("#imei").val());
+                        $("#IMEIButton").click();
+                    }
+                },
+            });
+        }
+
+        function sendDocuments() {
+            var fdata = new FormData();
+
+            fdata.append($("#nationalCard_temp").get(0).files[0].name, $("#nationalCard_temp").get(0).files[0]);
+
+            fdata.append($("#orderPic_temp").get(0).files[0].name, $("#orderPic_temp").get(0).files[0]);
+
+            fdata.set('model.PhoneNumber', $("#finalPhoneNumber").val());
+
+            fdata.set('model.DeviceIMEI', $("#finalImei").val());
+
+            $.ajax({
+
+                type: "POST",
+
+                url: "/Device/Active/OnConfirm",
+
+                beforeSend: function (xhr) {
+
+                    xhr.setRequestHeader("XSRF-TOKEN",
+
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+
+                },
+
+                data: fdata,
+
+                contentType: false,
+
+                processData: false,
+
+                success: function (response) {
+                    if (response) {
+                        $("#overlay").show();
+
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000 * 5);
+                    } else {
+                        SendNotification("error", "خطا در بارگزاری اطلاعات.");
+                    }
+                },
+            });
+        }
+
+        $("input[type='file']").on("change", function (e) {
+
+            var count = 1;
+            var files = e.currentTarget.files; // puts all files into an array
+
+            console.log(files);
+
+            // call them as such; files[0].size will get you the file size of the 0th file
+            for (var x in files) {
+
+                var filesize = ((files[x].size / 1024) / 1024).toFixed(4); // MB
+
+                console.log(files[x].type)
+                if (files[x].name != "item" && typeof files[x].name != "undefined" && filesize >= 10) {
+                    SendNotification("error", "حجم فایل بیش از حد مجاز است.");
+                    return;
+                } else if (files[x].name != "item" && typeof files[x].name != "undefined" && !(files[x].type == "image/jpeg" || files[x].type == "image/png")) {
+                    SendNotification("error", "فرمت فایل مجاز نیست.");
+                    return;
+                } else if (files[x].name == "item" && typeof files[x].name == "undefined") {
+                    SendNotification("error", "فایل خراب است.");
+                    return;
+                }
+            }
+        });
+    </script>
+</body>
 </html>

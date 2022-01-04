@@ -15,6 +15,8 @@ namespace Domain.Entities.Data
 
         public bool IsConfirm { get; set; } = false;
 
+        public bool IsDeclined { get; set; } = false;
+
         public long ImportedDataRef { get; set; }
 
         public DateTime CreateDate { get; set; } = DateTime.Now;
@@ -24,6 +26,6 @@ namespace Domain.Entities.Data
         public string Description { get; set; }
 
         [ForeignKey("ImportedDataRef")]
-        public virtual Imported ImportedData { get; set; }
+        public Imported ImportedData { get; set; }
     }
 }

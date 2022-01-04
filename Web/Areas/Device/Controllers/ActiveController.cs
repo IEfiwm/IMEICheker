@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Data;
+﻿using Application.Extensions;
+using Domain.Entities.Data;
 using Infrastructure.Repositories.Application;
 using Infrastructure.Repositories.Application.Data;
 using Microsoft.AspNetCore.Authorization;
@@ -32,7 +33,8 @@ namespace Web.Areas.Device.Controllers
             _documentRepository = documentRepository;
         }
 
-        public IActionResult Confirm()
+        [AllowAnonymous]
+        public IActionResult Index()
         {
             return View();
         }
@@ -99,12 +101,21 @@ namespace Web.Areas.Device.Controllers
 
             var res = await _documentRepository.SaveChangesAsync() > 0;
 
+            var d = await _importedRepository.GetByIdAsync((int)data.Id);
+
+            d.PhoneNumber = model.PhoneNumber;
+
+            if ((await _importedRepository.SaveChangesAsync()) > 0)
+                SMSProvider.Send(model.PhoneNumber, $"مدارک شما با موفقیت دریافت شدند");
+
             return Ok(res);
         }
 
         public async Task<IActionResult> CheckIMEIIsExist(string imei)
         {
-            if ((await _importedRepository.GetByIMEI(imei)) == null)
+            var model = await _importedRepository.GetByIMEI(imei);
+
+            if (model == null || model.IsUsed)
             {
                 return Ok(false);
             }
