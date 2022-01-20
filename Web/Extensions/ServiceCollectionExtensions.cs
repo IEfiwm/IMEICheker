@@ -7,6 +7,7 @@ using Infrastructure.Repositories.Application.Basic;
 using Infrastructure.Repositories.Application.Data;
 using Infrastructure.Repositories.Application.Idenitity;
 using Infrastructure.Shared.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.Globalization;
 using Web.Services;
@@ -63,6 +65,12 @@ namespace Web.Extensions
 
         private static void AddAuthenticationScheme(this IServiceCollection services, IConfiguration configuration)
         {
+            //services.AddAuthentication(x =>
+            //{
+            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //});
+
             services.AddMvc(o =>
             {
                 //Add Authentication to all Controllers by default.

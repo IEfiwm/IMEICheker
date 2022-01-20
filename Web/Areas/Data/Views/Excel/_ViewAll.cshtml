@@ -1,0 +1,76 @@
+﻿@using Web.Areas.Admin.Models
+@using Web.Areas.Data.Models
+@model IEnumerable<DeviceViewModel>
+<table class="table table-striped" id="userTable">
+    <thead>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                IMEI
+            </th>
+            <th>
+                کد فعالسازی
+            </th>
+            <th>
+                شماره تلفن ثبت شده
+            </th>
+            <th>
+                وضعیت
+            </th>
+            <th>
+                #
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var device in Model)
+        {
+            <tr>
+                <td>
+                    <a>
+                        @device.Id
+                    </a>
+                </td>
+                <td>
+                    <a>
+                        @device.IMEI
+                    </a>
+                </td>
+                <td>
+                    <a>
+                        @device.ActiveCode
+                    </a>
+                </td>
+                <td>
+                    <a>
+                        @device.PhoneNumber
+                    </a>
+                </td>
+                <td>
+                    @if (device.IsUsed)
+                    {
+                        <span class="badge badge-success">استفاده شده</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-danger">استفاده نشده</span>
+                    }
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-danger" title="حذف">
+                            <i class="fa fa-ban"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $("#userTable").DataTable();
+    });
+</script>

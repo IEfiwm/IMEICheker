@@ -16,10 +16,12 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Web.Areas.Data.Models;
 using Web.Controllers;
 
 namespace Web.Areas.Attendance.Controllers
@@ -32,12 +34,6 @@ namespace Web.Areas.Attendance.Controllers
 
         private readonly IimportedRepository _repository;
 
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        private readonly IBankAccountRepository _bankAccountRepository;
-
-        private readonly IProjectRepository _projectRepository;
-
         public ExcelController(IHostingEnvironment hostingEnvironment,
             IimportedRepository repository,
             UserManager<ApplicationUser> userManager,
@@ -46,13 +42,10 @@ namespace Web.Areas.Attendance.Controllers
         {
             _hostingEnvironment = hostingEnvironment;
             _repository = repository;
-            _userManager = userManager;
-            _bankAccountRepository = bankAccountRepository;
-            _projectRepository = projectRepository;
         }
 
         [HttpGet]
-        public IActionResult Devices()
+        public IActionResult ImportDevice()
         {
             return View();
         }
@@ -130,6 +123,31 @@ namespace Web.Areas.Attendance.Controllers
 
                 return false;
             }
+        }
+
+        [HttpGet]
+        public IActionResult Devices()
+        {
+            return View("Index");
+        }
+
+        public async Task<IActionResult> LoadAll()
+        {
+            var list = await _repository.GetListAsync();
+
+            var model = _mapper.Map<IEnumerable<DeviceViewModel>>(list);
+
+            return PartialView("_ViewAll", model);
+        }
+
+        [HttpGet]
+        public async Task<bool> DeleteDevice(long id)
+        {
+            var model = await _repository.GetByIdAsync(id);
+
+            model.IsDeleted = true;
+
+            return (await _repository.SaveChangesAsync()) > 0;
         }
     }
 }

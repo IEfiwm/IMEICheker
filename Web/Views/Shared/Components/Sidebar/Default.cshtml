@@ -54,7 +54,7 @@
                     <li class="nav-header">@localizer["Basic"]</li>
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon fa fa-user"></i>
+                            <i class="nav-icon fa fa-list"></i>
                             <p>
                                 @localizer["Data"]
                                 <i class="right fa fa-angle-left"></i>
@@ -62,17 +62,21 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a is-active-route asp-area="Data" asp-controller="Excel" asp-action="Devices" class="nav-link">
-                                    <i class="fa fa-user-circle nav-icon"></i>
-                                    <p>@localizer["ImportIMEIData"]</p>
+                                <a href="/data/excel/importdevice" class="nav-link">
+                                    <i class="fa fa-cube  nav-icon"></i>
+                                    <p>وارد کردن دستگاه</p>
+                                </a>
+                                <a href="/data/excel/devices" class="nav-link">
+                                    <i class="fa fa-bars nav-icon"></i>
+                                    <p>دستگاه ها</p>
                                 </a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-header">بایگانی اسناد</li>
-                    <li is-active-route asp-area="Admin" asp-controller="Document" class="nav-item has-treeview">
+                    <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon fa fa-user"></i>
+                            <i class="nav-icon fa fa-list"></i>
                             <p>
                                 مدارک
                                 <i class="right fa fa-angle-left"></i>
@@ -80,8 +84,8 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a is-active-route asp-area="Admin" asp-controller="Document" asp-action="Index" class="nav-link">
-                                    <i class="fa fa-user-circle nav-icon"></i>
+                                <a href="/admin/document/index" class="nav-link">
+                                    <i class="fa fa-file-archive-o nav-icon"></i>
                                     <p>مدیریت مدارک</p>
                                 </a>
                             </li>

@@ -30,7 +30,6 @@
     <Folder Include="Areas\Dashboard\Data\" />
     <Folder Include="Areas\Dashboard\Models\" />
     <Folder Include="Areas\Data\Data\" />
-    <Folder Include="Areas\Data\Models\" />
     <Folder Include="Areas\Device\Data\" />
     <Folder Include="Areas\Settings\Data\" />
     <Folder Include="Areas\Settings\Models\" />

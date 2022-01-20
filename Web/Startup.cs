@@ -4,6 +4,7 @@ using AspNetCoreHero.ToastNotification.Extensions;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using Infrastructure.Extensions;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -77,6 +78,9 @@ namespace Web
             services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
 
             services.AddScoped<IViewRenderService, ViewRenderService>();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).
+                AddCookie(x => x.LoginPath = "/Identity/Account/Login?ReturnUrl=%2F");
 
             //services.AddTransient<IBankAccountRepository, BankAccountRepository>();
         }

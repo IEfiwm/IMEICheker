@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "دستگاه ها";
+    ViewData["Caption"] = "لیست دستگاه ها را اینجا مدیریت کنید";
+}
+<div class="card">
+    <div id="viewAll" class="card-body table-responsive">
+    </div>
+</div>
+@section Scripts
+{
+<script src="~/js/site.js"></script>
+<script>
+    $(document).ready(function () {
+        loadData();
+    });
+    function loadData() {
+        $('#viewAll').load('/data/excel/LoadAll');
+    }
+</script>
+}
