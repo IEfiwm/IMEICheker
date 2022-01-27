@@ -47,7 +47,7 @@ namespace Web.Areas.Attendance.Controllers
         [HttpGet]
         public IActionResult ImportDevice()
         {
-            return View();
+            return View("Devices");
         }
 
         [HttpPost]

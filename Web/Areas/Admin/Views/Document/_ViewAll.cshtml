@@ -2,6 +2,9 @@
 @using Common.Enums
 @using Web.Areas.Admin.Models
 @model IEnumerable<DocumentViewModel>
+@{
+    string t = "";
+}
 <table class="table table-striped" id="docTable">
     <thead>
         <tr>
@@ -20,42 +23,52 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var doc in Model)
+        @foreach (var docs in Model.GroupBy(m => m.IMEI))
         {
-            <tr>
-                <td>
-                    <a>
-                        @doc.IMEI
-                    </a>
-                </td>
-                <td>
-                    <a>
-                        @(EnumHelper<DocumentType>.GetDisplayValue(doc.DocumentType))
-                    </a>
-                </td>
-                <td>
-                    @if (doc.IsConfirm)
-                    {
-                        <span class="badge badge-success">پذیرفته شده</span>
-                    }
-                    else
-                    {
-                        <span class="badge badge-danger">پذیرفته نشده</span>
-                    }
-                </td>
-                <td>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            عملیات
-                        </button>
-                        <div class="dropdown-menu shadow animated--grow-in">
-                            <button class="dropdown-item" onclick="showDoc('@doc.Id', '@doc.IMEI', '@doc.FileName')">
-                                <i class="fa fa-pen"></i> نمایش مدرک
+            if (t == "background-color:whitesmoke")
+            {
+                t = "background-color:white";
+            }
+            else
+                t = "background-color:whitesmoke";
+
+            @foreach (var doc in docs)
+            {
+                <tr style="@t">
+                    <td>
+                        <a>
+                            @doc.IMEI
+                        </a>
+                    </td>
+                    <td>
+                        <a>
+                            @(EnumHelper<DocumentType>.GetDisplayValue(doc.DocumentType))
+                        </a>
+                    </td>
+                    <td>
+                        @if (doc.IsConfirm)
+                        {
+                            <span class="badge badge-success">پذیرفته شده</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-danger">پذیرفته نشده</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                عملیات
                             </button>
+                            <div class="dropdown-menu shadow animated--grow-in">
+                                <button class="dropdown-item" onclick="showDoc('@doc.Id', '@doc.IMEI', '@doc.FileName')">
+                                    <i class="fa fa-pen"></i> نمایش مدرک
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>

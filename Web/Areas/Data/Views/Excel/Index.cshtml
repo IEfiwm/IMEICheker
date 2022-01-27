@@ -10,11 +10,22 @@
 {
 <script src="~/js/site.js"></script>
 <script>
-    $(document).ready(function () {
-        loadData();
-    });
-    function loadData() {
-        $('#viewAll').load('/data/excel/LoadAll');
+        $(document).ready(function () {
+            loadData();
+        });
+        function loadData() {
+            $('#viewAll').load('/data/excel/LoadAll');
+        }
+
+    function deleteDevice(id){
+               $.ajax({
+            url: "/data/excel/deletedevice/" + id,
+            success: function (result) {
+                notyf.success("عملیات با موفقیت انجام شد.");
+
+                loadData();
+            }
+        });
     }
 </script>
 }

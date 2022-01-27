@@ -16,7 +16,7 @@
                 <h4 class="modal-title"><span id="imeiLabel"></span></h4>
             </div>
             <div class="modal-body text-center">
-                <img style="width: 600px; height: 600px; " id="docImage" src="" />
+                <img id="docImage" src="" />
                 <input hidden id="docId" />
             </div>
             <div class="modal-footer">
@@ -29,53 +29,53 @@
 
 @section Scripts
 {
-    <script src="~/js/site.js"></script>
-    <script>
-        $(document).ready(function () {
-            loadData();
-            //$('#reload').on('click', function () {
-            //    loadData();
-            //});
+<script src="~/js/site.js"></script>
+<script>
+    $(document).ready(function () {
+        loadData();
+        //$('#reload').on('click', function () {
+        //    loadData();
+        //});
+    });
+    function loadData() {
+        $('#viewAll').load('/admin/document/LoadAll');
+    }
+
+    function showDoc(id, label, fileName) {
+        $("#imeiLabel").html(label);
+
+        $("#docId").val(id);
+
+        $("#docImage").attr("src", "/admin/document/get/" + fileName);
+
+        $("#detail").modal('show');
+    }
+
+    function confirmDoc() {
+        $.ajax({
+            url: "/admin/document/confrimdoc/" + $("#docId").val(),
+            success: function (result) {
+                notyf.success("عملیات با موفقیت انجام شد.");
+
+                loadData();
+            }
         });
-        function loadData() {
-            $('#viewAll').load('/admin/document/LoadAll');
-        }
 
-        function showDoc(id, label, fileName) {
-            $("#imeiLabel").html(label);
+        $("#detail").modal('hide');
+    }
 
-            $("#docId").val(id);
+    function declineDoc() {
+        $.ajax({
+            url: "/admin/document/declinedoc/" + $("#docId").val(),
+            success: function (result) {
+                notyf.success("عملیات با موفقیت انجام شد.");
 
-            $("#docImage").attr("src", "/admin/document/get/" + fileName);
+                loadData();
+            }
+        });
 
-            $("#detail").modal('show');
-        }
+        $("#detail").modal('hide');
+    }
 
-        function confirmDoc() {
-            $.ajax({
-                url: "/admin/document/confrimdoc/" + $("#docId").val(),
-                success: function (result) {
-                    notify.success("عملیات با موفقیت انجام شد.");
-
-                    loadData();
-                }
-            });
-
-            $("#detail").modal('hide');
-        }
-
-        function declineDoc() {
-            $.ajax({
-                url: "/admin/document/declinedoc/" + $("#docId").val(),
-                success: function (result) {
-                    notify.success("عملیات با موفقیت انجام شد.");
-
-                    loadData();
-                }
-            });
-
-            $("#detail").modal('hide');
-        }
-
-    </script>
+</script>
 }
