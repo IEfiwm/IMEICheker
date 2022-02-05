@@ -9,5 +9,8 @@ namespace Common.Enums
 
         [Display(Name = "کارت ملی")]
         NationalCard = 1,
+
+        [Display(Name = "عکس کارتون دستگاه")]
+        DeviceBoxPicture = 2,
     }
 }

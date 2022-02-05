@@ -79,7 +79,11 @@ namespace Web.Areas.Admin.Controllers
             {
                 var docs = await _documentRepository.GetAllByImportedRef(doc.ImportedDataRef);
 
-                if (docs.Any(m => m.IsConfirm && m.DocumentType == DocumentType.NationalCard) && docs.Any(m => m.IsConfirm && m.DocumentType == DocumentType.OrderPicture))
+                if (docs.Any(m => m.IsConfirm && m.DocumentType == DocumentType.NationalCard)
+                    &&
+                    docs.Any(m => m.IsConfirm && m.DocumentType == DocumentType.OrderPicture)
+                    &&
+                    docs.Any(m => m.IsConfirm && m.DocumentType == DocumentType.DeviceBoxPicture))
                 {
                     await SMSProvider.SendAsync(doc.ImportedData.PhoneNumber, doc.ImportedData.IMEI, doc.ImportedData.ActiveCode, "ActiveCode");
 

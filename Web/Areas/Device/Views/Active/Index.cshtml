@@ -72,13 +72,17 @@
 
             <fieldset>
                 <h3 class="rtl">مدارک مورد نیاز را آپلود کنید</h3>
-                <h6 style="direction:rtl">عکس فاکتور (صورتحساب) و کارت ملی ثبت شده هنگام خرید را آپلود نمایید.</h6>
+                <h6 style="direction:rtl;padding-bottom:5px !important">عکس فاکتور (صورتحساب) و کارت ملی ثبت شده هنگام خرید را آپلود نمایید.</h6>
+                <h6 style="direction:rtl">عکس جعبه دستگاه را آپلود نمایید.(به گونه ای عکس گرفته شود که IMEI دستگاه خوانا باشد)</h6>
                 <div class="input-group">
                     <div class="custom-file">
                         <input type="file" name="orderPic_temp" class="custom-file-input" accept=".jpg,.png" id="orderPic_temp">
                         <input type="file" name="nationalCard_temp" class="custom-file-input" accept=".jpg,.png" id="nationalCard_temp">
+                        <input type="file" name="deviceBoxPic_temp" class="custom-file-input" accept=".jpg,.png" id="deviceBoxPic_temp">
                         <label class="custom-file-label" for="orderPic_temp"><i class="ion-android-cloud-outline"></i>انتخاب صورت حساب</label>
                         <label class="custom-file-label" for="nationalCard_temp"><i class="ion-android-cloud-outline"></i>انتخاب کارت ملی</label>
+                        <br />
+                        <label class="custom-file-label" for="deviceBoxPic_temp" style="width: 258px;"><i class="ion-android-cloud-outline"></i>انتخاب عکس جعبه دستگاه</label>
                     </div>
                 </div>
                 <button type="button" class="action-button previous previous_button">بازگشت</button>
@@ -182,6 +186,8 @@
             fdata.append($("#nationalCard_temp").get(0).files[0].name, $("#nationalCard_temp").get(0).files[0]);
 
             fdata.append($("#orderPic_temp").get(0).files[0].name, $("#orderPic_temp").get(0).files[0]);
+
+            fdata.append($("#deviceBoxPic_temp").get(0).files[0].name, $("#deviceBoxPic_temp").get(0).files[0]);
 
             fdata.set('model.PhoneNumber', $("#finalPhoneNumber").val());
 

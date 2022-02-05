@@ -56,12 +56,16 @@ namespace Web.Areas.Device.Controllers
 
             IFormFile file02 = Request.Form.Files[1];
 
-            if (model is null || file02 is null || file01 is null || data is null)
+            IFormFile file03 = Request.Form.Files[2];
+
+            if (model is null || file03 is null || file02 is null || file01 is null || data is null)
                 return Ok(false);
 
             await SaveFile(file01, Common.Enums.DocumentType.NationalCard, data.Id);
 
             await SaveFile(file02, Common.Enums.DocumentType.OrderPicture, data.Id);
+
+            await SaveFile(file03, Common.Enums.DocumentType.DeviceBoxPicture, data.Id);
 
             var res = await _documentRepository.SaveChangesAsync() > 0;
 
