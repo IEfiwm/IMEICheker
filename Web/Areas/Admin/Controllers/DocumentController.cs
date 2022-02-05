@@ -62,7 +62,7 @@ namespace Web.Areas.Admin.Controllers
             doc.IsDeclined = true;
 
             if ((await _documentRepository.SaveChangesAsync()) > 0)
-                SMSProvider.Send(doc.ImportedData.PhoneNumber, $"{EnumHelper<DocumentType>.GetDisplayValue(doc.DocumentType)} ارسالی شما معتبر نمی باشد.");
+                await SMSProvider.SendTextAsync(doc.ImportedData.PhoneNumber, doc.ImportedData.IMEI, EnumHelper<DocumentType>.GetDisplayValue(doc.DocumentType), "DeclineDocument");
 
             return true;
         }
@@ -81,7 +81,7 @@ namespace Web.Areas.Admin.Controllers
 
                 if (docs.Any(m => m.IsConfirm && m.DocumentType == DocumentType.NationalCard) && docs.Any(m => m.IsConfirm && m.DocumentType == DocumentType.OrderPicture))
                 {
-                    SMSProvider.Send(doc.ImportedData.PhoneNumber, $"مدارک شما تایید شد\nکد شما : {doc.ImportedData.ActiveCode}");
+                    await SMSProvider.SendAsync(doc.ImportedData.PhoneNumber, doc.ImportedData.IMEI, doc.ImportedData.ActiveCode, "ActiveCode");
 
                     var model = await _importedRepository.GetByIdAsync((int)doc.ImportedDataRef);
 
@@ -91,7 +91,7 @@ namespace Web.Areas.Admin.Controllers
                 }
                 else
                 {
-                    SMSProvider.Send(doc.ImportedData.PhoneNumber, $"{EnumHelper<DocumentType>.GetDisplayValue(doc.DocumentType)} ارسالی شما تایید شد.");
+                    await SMSProvider.SendTextAsync(doc.ImportedData.PhoneNumber, doc.ImportedData.IMEI, EnumHelper<DocumentType>.GetDisplayValue(doc.DocumentType), "AcceptDocument");
                 }
             }
 

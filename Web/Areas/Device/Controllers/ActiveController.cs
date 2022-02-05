@@ -69,14 +69,18 @@ namespace Web.Areas.Device.Controllers
 
             d.PhoneNumber = model.PhoneNumber;
 
-            if ((await _importedRepository.SaveChangesAsync()) > 0)
-                SMSProvider.Send(model.PhoneNumber, $"مدارک شما با موفقیت دریافت شدند");
+            await _importedRepository.SaveChangesAsync();
+
+            //if ((await _importedRepository.SaveChangesAsync()) > 0)
+            await SMSProvider.SendAsync(model.PhoneNumber, model.DeviceIMEI, "DocumentsUploaded");
 
             return Ok(res);
         }
 
         public async Task<IActionResult> CheckIMEIIsExist(string imei)
         {
+            //await SMSProvider.SendAsync("09127215825", "5464", "45456", "ActiveCode");
+
             var model = await _importedRepository.GetByIMEI(imei);
 
             if (model == null || model.IsUsed)

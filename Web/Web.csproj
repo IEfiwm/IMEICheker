@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.1.0" />
+    <PackageReference Include="KavenegarDotNetCore" Version="1.0.3" />
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="9.0.0" />
     <PackageReference Include="NPOI" Version="2.5.5" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.2" />

@@ -1,45 +1,64 @@
 ﻿using Common.Helpers;
+using Kavenegar;
 using RestSharp;
 using System;
+using System.Threading.Tasks;
 
 namespace Application.Extensions
 {
     public static class SMSProvider
     {
-        public static bool SendOTPCode(string recipient, string code)
+        private static readonly string _apiKey = "3841522F4F2B5637703436712F564B4679745377444F4D465A4C6D736E326E444633516A44332B736C55493D";
+
+        public static async Task<bool> SendOTPCodeAsync(string recipient, string code)
         {
             bool result = false;
 
-            var message = PublicSettings.OTPTemplate.Replace("#CODE#", code);
+            KavenegarApi api = new KavenegarApi(_apiKey);
 
-            var client = new RestClient($@"https://smspanel.trez.ir/SendMessageWithCode.ashx?Username=iefiwm&Password=235421402246&Mobile={recipient}&Message={message}");
-
-            client.Timeout = -1;
-
-            var request = new RestRequest(Method.GET);
-
-            IRestResponse response = client.Execute(request);
-
-            if (Convert.ToInt32(response.Content.ToString()) != 8) result = true;
+            var res = await api.VerifyLookup(recipient, code, "kalamato");
 
             return result;
         }
 
-        public static bool Send(string recipient, string message)
+        public static async Task<bool> SendAsync(string recipient, string token, string template)
         {
             bool result = false;
 
-            var client = new RestClient($@"https://smspanel.trez.ir/SendMessageWithCode.ashx?Username=iefiwm&Password=235421402246&Mobile={recipient}&Message={message}");
+            KavenegarApi api = new KavenegarApi(_apiKey);
 
-            client.Timeout = -1;
+            var res = await api.VerifyLookup(recipient, token, template);
 
-            var request = new RestRequest(Method.GET);
+            return !result;
+        }
 
-            IRestResponse response = client.Execute(request);
+        public static async Task<bool> SendAsync(string recipient, string token, string token2, string template)
+        {
+            bool result = false;
 
-            if (Convert.ToInt32(response.Content.ToString()) != 8) result = true;
+            KavenegarApi api = new KavenegarApi(_apiKey);
+
+            var res = await api.VerifyLookup(recipient, token, token2, null, template);
 
             return result;
         }
+
+        public static async Task<bool> SendTextAsync(string recipient, string token, string text, string template)
+        {
+            bool result = false;
+
+            KavenegarApi api = new KavenegarApi(_apiKey);
+
+            var res = await api.VerifyLookup(recipient, token, "", "", text, template);
+
+            return result;
+        }
+
+        //public static bool SendOTPCodeKavenegar(string recipient, string code)
+        //{
+        //    KavenegarApi api = new KavenegarApi("3841522F4F2B5637703436712F564B4679745377444F4D465A4C6D736E326E444633516A44332B736C55493D");
+
+        //    var result = api.Send("", recipient, "خدمات پیام کوتاه کاوه نگار");
+        //}
     }
 }
