@@ -13,6 +13,7 @@
     <script src="/active/jquery-easing/1.3/jquery.easing.min.js"></script>
     <script asp-append-version="true" src="/active/intl-tel-input/12.1.2/js/intlTelInput.js"></script>
     <script src="/active/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="/active/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css" rel="stylesheet">
     <link asp-append-version="true" href="/active/intl-tel-input/12.1.2/css/intlTelInput.css" rel="stylesheet">
     <link href="/active/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
@@ -120,10 +121,58 @@
             <p>وضعیت فرآیند با پیامک به شما اطلاع داده می شود.</p>
             </div>*@
     </div>
+    <div data-backdrop="static" data-keyboard="false" class="modal fade" id="verificationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                @*                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>*@
+                <div class="modal-body">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="480px" height="60px"><polygon fill="#42a5f5" points="29.62,3 33.053,8.308 39.367,8.624 39.686,14.937 44.997,18.367 42.116,23.995 45,29.62 39.692,33.053 39.376,39.367 33.063,39.686 29.633,44.997 24.005,42.116 18.38,45 14.947,39.692 8.633,39.376 8.314,33.063 3.003,29.633 5.884,24.005 3,18.38 8.308,14.947 8.624,8.633 14.937,8.314 18.367,3.003 23.995,5.884" /><polygon fill="#fff" points="21.396,31.255 14.899,24.76 17.021,22.639 21.428,27.046 30.996,17.772 33.084,19.926" /></svg>
+                    <h6 class="justify-content-center mb-3 mt-3" style="direction:rtl;text-align:center">کد ارسال شده به شماره وارد شده را وارد کنید.</h6>
+                    <div class="form-row justify-content-center">
+                        <div class="form-group col-4">
+                            <input type="text" style="text-align:center" class="form-control" id="verificationCode" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="verifyPhonenumber()">تایید شماره تلفن</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="/js/script.js"></script>
     <script src="/js/common.js"></script>
     <script>
         $("#overlay").hide()
+
+        function verifyPhonenumber(){
+            $.ajax({
+
+                        type: "GET",
+
+                        url: "/Device/Active/VerifyPhone?phone=" + $("#phoneNumber").val() + "&code=" + $("#verificationCode").val(),
+
+                        success: function (response) {
+                            if (!response) {
+                                SendNotification("error", "کد تایید صحیح نمی باشد.");
+                                return;
+                            } else {
+                                $('#verificationModal').modal('hide');
+
+                                SendNotification("success","شماره تلفن شما تایید شد.");
+
+                                $("#finalPhoneNumber").val("0" + $("#phoneNumber").val());
+
+                                fs = true;
+                            }
+                        },
+                    });
+        }
 
         function confirmPhoneNumber() {
             if ($("#phone").val() != "+98") {
@@ -142,9 +191,26 @@
                 return;
             }
 
-            fs = true;
+            fs = false;
 
-            $("#finalPhoneNumber").val("0" + $("#phoneNumber").val())
+            $.ajax({
+
+                        type: "GET",
+
+                        url: "/Device/Active/IsPhoneVerified?phone=" + $("#phoneNumber").val(),
+
+                        success: function (response) {
+                            if (!response) {
+                                fs = false;
+        $('#verificationModal').modal('show');
+
+                                return;
+                            } else {
+                                $("#finalPhoneNumber").val("0" + $("#phoneNumber").val())
+                                fs = true;
+                            }
+                        },
+                    });
         }
 
         function confirmIMEI() {

@@ -3,6 +3,7 @@ using Domain.Entities.Data;
 using ImageMagick;
 using Infrastructure.Repositories.Application;
 using Infrastructure.Repositories.Application.Data;
+using Infrastructure.Repositories.Application.Idenitity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -27,13 +28,17 @@ namespace Web.Areas.Device.Controllers
 
         private readonly IDocumentRepository _documentRepository;
 
+        private readonly IAuthenticationCodeRepository _authenticationCodeRepository;
+
         public ActiveController(IimportedRepository importedRepository,
             IHostingEnvironment hostingEnvironment,
-            IDocumentRepository documentRepository)
+            IDocumentRepository documentRepository,
+            IAuthenticationCodeRepository authenticationCodeRepository)
         {
             _importedRepository = importedRepository;
             _hostingEnvironment = hostingEnvironment;
             _documentRepository = documentRepository;
+            _authenticationCodeRepository = authenticationCodeRepository;
         }
 
         [AllowAnonymous]
@@ -48,6 +53,11 @@ namespace Web.Areas.Device.Controllers
             var data = await _importedRepository.GetByIMEI(model.DeviceIMEI);
 
             if (data.IsUsed)
+            {
+                return Ok(false);
+            }
+
+            if (await _authenticationCodeRepository.IsDeviceVerified(model.PhoneNumber))
             {
                 return Ok(false);
             }
@@ -79,6 +89,23 @@ namespace Web.Areas.Device.Controllers
             await SMSProvider.SendAsync(model.PhoneNumber, model.DeviceIMEI, "DocumentsUploaded");
 
             return Ok(res);
+        }
+
+        public async Task<IActionResult> IsPhoneVerified(string phone)
+        {
+            if (await _authenticationCodeRepository.IsDeviceVerified(phone))
+                return Ok(true);
+
+            var code = await _authenticationCodeRepository.GenerateNewCode(phone);
+
+            await SMSProvider.SendAsync($@"{phone}", code, "kalamato");
+
+            return Ok(false);
+        }
+
+        public async Task<IActionResult> VerifyPhone(string phone, string code)
+        {
+            return Ok(await _authenticationCodeRepository.VerifyCode(phone, code));
         }
 
         public async Task<IActionResult> CheckIMEIIsExist(string imei)

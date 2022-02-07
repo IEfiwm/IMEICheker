@@ -21,14 +21,14 @@ namespace Infrastructure.Repositories.Application.Idenitity
         {
             var model = await Model.Where(m => m.PhoneNumber == phone && m.IsActive && m.ExpireDate.Date == DateTime.Now.Date).ToListAsync();
 
-            if (model.Count > 10)
-            {
-                return "";
-            }
-            else if (model.Any(m => m.ExpireDate >= DateTime.Now))
-            {
-                return "-1";
-            }
+            //if (model.Count > 10)
+            //{
+            //    return "";
+            //}
+            //else if (model.Any(m => m.ExpireDate >= DateTime.Now))
+            //{
+            //    return "-1";
+            //}
 
             string code = CommonHelper.GenerateRandomOTP(PublicSettings.OTPCodeLenght);
 
@@ -52,7 +52,16 @@ namespace Infrastructure.Repositories.Application.Idenitity
         {
             var model = await Model.Where(m => m.Code == code && m.PhoneNumber == phone).FirstOrDefaultAsync();
 
+            model.IsUsed = true;
+
+            await SaveChangesAsync();
+
             return model?.ExpireDate >= DateTime.Now;
+        }
+
+        public async Task<bool> IsDeviceVerified(string phone)
+        {
+            return await Model.AnyAsync(m => m.IsUsed && m.PhoneNumber == phone);
         }
     }
 }

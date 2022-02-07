@@ -9,6 +9,8 @@ namespace Infrastructure.Repositories.Application.Idenitity
     {
         Task<string> GenerateNewCode(string phone);
 
+        Task<bool> IsDeviceVerified(string phone);
+
         Task<bool> VerifyCode(string phone, string code);
     }
 }
