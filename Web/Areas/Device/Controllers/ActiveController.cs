@@ -105,6 +105,11 @@ namespace Web.Areas.Device.Controllers
 
         public async Task<IActionResult> VerifyPhone(string phone, string code)
         {
+            if (string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(code))
+            {
+                return Ok(false);
+            }
+
             return Ok(await _authenticationCodeRepository.VerifyCode(phone, code));
         }
 
